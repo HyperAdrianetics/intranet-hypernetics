@@ -8,8 +8,7 @@ import {
   RefreshCcw,
   Copy,
   Type,
-  Palette,
-  Image as ImageIcon,
+
   FileText,
   User,
   Layers,
@@ -81,17 +80,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         addons: template.addons || [],
         clauses: template.clauses || data.clauses,
       });
-    }
-  };
-
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        updateQuote({ logo: reader.result as string });
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -313,6 +301,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </section>
 
+      {/*
       <section className="space-y-4">
         <h3
           className={`text-sm font-bold uppercase tracking-wider flex items-center gap-2 ${isDarkMode ? "text-slate-500" : "text-slate-400"}`}
@@ -381,28 +370,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
               />
             </div>
           </div>
-          <div
-            className="flex items-center gap-3 p-3 border rounded-xl border-dashed cursor-pointer hover:border-primary transition-all"
-            onClick={() =>
-              updateQuote({ showItemPrices: !data.showItemPrices })
-            }
-          >
-            <input
-              type="checkbox"
-              checked={data.showItemPrices}
-              onChange={(e) =>
-                updateQuote({ showItemPrices: e.target.checked })
-              }
-              className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary"
-            />
-            <span
-              className={`text-xs font-bold ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}
-            >
-              Mostrar precios por concepto
-            </span>
-          </div>
         </div>
       </section>
+      */}
+
+      <div
+        className="flex items-center gap-3 p-3 border rounded-xl border-dashed cursor-pointer hover:border-primary transition-all"
+        onClick={() =>
+          updateQuote({ showItemPrices: !data.showItemPrices })
+        }
+      >
+        <input
+          type="checkbox"
+          checked={data.showItemPrices}
+          onChange={(e) =>
+            updateQuote({ showItemPrices: e.target.checked })
+          }
+          className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary"
+        />
+        <span
+          className={`text-xs font-bold ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}
+        >
+          Mostrar precios por concepto
+        </span>
+      </div>
 
       <section className="space-y-4">
         <div className="flex items-center justify-between">
