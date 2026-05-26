@@ -117,45 +117,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           Exportar PDF
         </button>
 
-        <div className="flex flex-col gap-2 p-3 border rounded-xl border-dashed">
-          <p className="text-[10px] font-black uppercase text-slate-400 mb-1">
-            Incluir en PDF:
-          </p>
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={data.includeQuotePage}
-                onChange={(e) =>
-                  updateQuote({ includeQuotePage: e.target.checked })
-                }
-                className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary"
-              />
-              <span
-                className={`text-[11px] font-bold ${isDarkMode ? "text-slate-400 group-hover:text-white" : "text-slate-500 group-hover:text-slate-800"}`}
-              >
-                Cotización
-              </span>
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={data.includeDetailsPage}
-                onChange={(e) =>
-                  updateQuote({ includeDetailsPage: e.target.checked })
-                }
-                className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary"
-              />
-              <span
-                className={`text-[11px] font-bold ${isDarkMode ? "text-slate-400 group-hover:text-white" : "text-slate-500 group-hover:text-slate-800"}`}
-              >
-                Detalles
-              </span>
-            </label>
-          </div>
-        </div>
-
         <div className="grid grid-cols-3 gap-2">
           <button
             onClick={resetQuote}
