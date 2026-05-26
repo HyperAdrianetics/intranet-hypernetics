@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuote } from '../hooks/useQuote';
 import { Sidebar } from './Sidebar';
 import { DocumentPreview } from './DocumentPreview';
@@ -12,6 +12,7 @@ interface QuoteEditorProps {
 export const QuoteEditor: React.FC<QuoteEditorProps> = ({ initialData, isDarkMode = false }) => {
   const brandKey = 'hypernetics';
   const { quote, updateQuote, resetQuote, duplicateQuote } = useQuote(brandKey, initialData);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const exportToPdf = async () => {
     const element = document.getElementById('quote-document');
@@ -169,15 +170,39 @@ export const QuoteEditor: React.FC<QuoteEditorProps> = ({ initialData, isDarkMod
 
   return (
     <div className={`flex h-screen w-full overflow-hidden font-sans ${isDarkMode ? 'bg-slate-900' : 'bg-slate-100'}`}>
+      {/* Toggle button */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className={`fixed top-6 left-6 z-50 no-print p-2.5 rounded-xl transition-all lg:hidden ${isDarkMode ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white text-slate-600 hover:bg-slate-100'} shadow-lg border ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}
+        aria-label={sidebarOpen ? 'Cerrar menú' : 'Abrir menú'}
+      >
+        {sidebarOpen ? (
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        )}
+      </button>
+
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
+
       {/* Editor Sidebar */}
-      <Sidebar
-        data={quote}
-        updateQuote={updateQuote}
-        resetQuote={resetQuote}
-        duplicateQuote={duplicateQuote}
-        exportPdf={exportToPdf}
-        isDarkMode={isDarkMode}
-      />
+      <div className={`${sidebarOpen ? 'fixed inset-y-0 left-0 z-50' : 'hidden'} lg:block transition-all`}>
+        <Sidebar
+          data={quote}
+          updateQuote={updateQuote}
+          resetQuote={resetQuote}
+          duplicateQuote={duplicateQuote}
+          exportPdf={exportToPdf}
+          isDarkMode={isDarkMode}
+        />
+      </div>
 
       {/* Preview Area */}
       <main className={`flex-grow overflow-y-auto p-12 flex flex-col items-center gap-6 ${isDarkMode ? 'bg-[#0a0b10] shadow-inner' : 'bg-slate-200 shadow-inner'}`}>
@@ -192,12 +217,20 @@ export const QuoteEditor: React.FC<QuoteEditorProps> = ({ initialData, isDarkMod
         </div>
       </main>
 
-      {/* Floating help or notifications */}
-      <div className="fixed bottom-6 right-6 no-print">
+      {/* Floating elements */}
+      <div className="fixed top-6 right-6 no-print z-50">
         <div className={`${isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400' : 'bg-white border-slate-200 text-slate-500'} backdrop-blur-md px-4 py-2 rounded-full shadow-lg border text-xs font-medium`}>
           Auto-guardado: Hypernetics
         </div>
       </div>
+
+      <button
+        onClick={exportToPdf}
+        className="fixed bottom-6 right-6 no-print z-50 bg-primary hover:brightness-110 text-white font-bold py-3 px-5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20 active:scale-95"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar PDF
+      </button>
     </div>
   );
 };

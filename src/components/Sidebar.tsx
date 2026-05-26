@@ -8,7 +8,6 @@ import {
   RefreshCcw,
   Copy,
   Type,
-
   FileText,
   User,
   Layers,
@@ -97,14 +96,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       <div className="flex flex-col gap-4">
-        <button
-          onClick={exportPdf}
-          className="w-full bg-primary hover:brightness-110 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20 active:scale-95"
-        >
-          <Download className="w-5 h-5" />
-          Exportar PDF
-        </button>
-
         <div className="grid grid-cols-3 gap-2">
           <button
             onClick={resetQuote}
@@ -480,6 +471,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
       </section>
+
+      <button
+        onClick={exportPdf}
+        className="w-full bg-primary hover:brightness-110 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20 active:scale-95"
+      >
+        <Download className="w-5 h-5" />
+        Exportar PDF
+      </button>
     </div>
   );
 };
