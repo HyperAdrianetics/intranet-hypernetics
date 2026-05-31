@@ -2,17 +2,75 @@ import React, { useState } from 'react';
 import { useQuote } from '../hooks/useQuote';
 import { Sidebar } from './Sidebar';
 import { DocumentPreview } from './DocumentPreview';
+import { CatalogPicker } from './catalog/CatalogPicker';
+import { CatalogAdmin } from './catalog/CatalogAdmin';
+import { QuoteList } from './QuoteList';
 import html2pdf from 'html2pdf.js';
-import type { QuoteData } from '../types/quote';
+import type { QuoteData, LineItem } from '../types/quote';
+import type { CatalogItem, ScopeBlock, TextBlock } from '../../shared';
+
 interface QuoteEditorProps {
   initialData: QuoteData;
   isDarkMode?: boolean;
 }
 
+const SAVE_LABEL: Record<string, string> = {
+  idle: 'Auto-guardado: Hypernetics',
+  saving: 'Guardando…',
+  saved: 'Guardado ✓',
+  error: 'Error al guardar',
+  offline: 'Sin conexión (respaldo local)',
+};
+
 export const QuoteEditor: React.FC<QuoteEditorProps> = ({ initialData, isDarkMode = false }) => {
   const brandKey = 'hypernetics';
-  const { quote, updateQuote, resetQuote, duplicateQuote } = useQuote(brandKey, initialData);
+  const {
+    quote,
+    quoteId,
+    quotes,
+    saveStatus,
+    updateQuote,
+    resetQuote,
+    duplicateQuote,
+    loadQuote,
+    newQuote,
+    deleteQuote,
+  } = useQuote(brandKey, initialData);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [modal, setModal] = useState<null | 'catalog' | 'list' | 'admin'>(null);
+
+  const insertCatalogItem = (item: CatalogItem) => {
+    const newItem: LineItem = {
+      id: Math.random().toString(36).slice(2, 11),
+      description: item.description,
+      quantity: 1,
+      price: item.price,
+    };
+    updateQuote({ items: [...quote.items, newItem] });
+  };
+
+  const insertScopeBlock = (block: ScopeBlock) => {
+    updateQuote({ scope: [...quote.scope, { title: block.title, items: [...block.items] }] });
+  };
+
+  const insertTextBlock = (block: TextBlock) => {
+    switch (block.type) {
+      case 'clause':
+        updateQuote({ clauses: [...quote.clauses, block.label] });
+        break;
+      case 'not_included':
+        updateQuote({ notIncluded: [...quote.notIncluded, block.label] });
+        break;
+      case 'payment_condition':
+        updateQuote({ paymentConditions: [...quote.paymentConditions, block.label] });
+        break;
+      case 'addon':
+        updateQuote({
+          addons: [...(quote.addons ?? []), { service: block.label, cost: block.value ?? '' }],
+        });
+        break;
+    }
+  };
 
   const exportToPdf = async () => {
     const element = document.getElementById('quote-document');
@@ -201,6 +259,9 @@ export const QuoteEditor: React.FC<QuoteEditorProps> = ({ initialData, isDarkMod
           duplicateQuote={duplicateQuote}
           exportPdf={exportToPdf}
           isDarkMode={isDarkMode}
+          onOpenCatalog={() => setModal('catalog')}
+          onOpenList={() => setModal('list')}
+          onOpenAdmin={() => setModal('admin')}
         />
       </div>
 
@@ -219,8 +280,18 @@ export const QuoteEditor: React.FC<QuoteEditorProps> = ({ initialData, isDarkMod
 
       {/* Floating elements */}
       <div className="fixed top-6 right-6 no-print z-50">
-        <div className={`${isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400' : 'bg-white border-slate-200 text-slate-500'} backdrop-blur-md px-4 py-2 rounded-full shadow-lg border text-xs font-medium`}>
-          Auto-guardado: Hypernetics
+        <div
+          className={`${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} ${
+            saveStatus === 'error'
+              ? 'text-red-500'
+              : saveStatus === 'offline'
+                ? 'text-amber-500'
+                : isDarkMode
+                  ? 'text-slate-400'
+                  : 'text-slate-500'
+          } backdrop-blur-md px-4 py-2 rounded-full shadow-lg border text-xs font-medium`}
+        >
+          {SAVE_LABEL[saveStatus] ?? SAVE_LABEL.idle}
         </div>
       </div>
 
@@ -231,6 +302,38 @@ export const QuoteEditor: React.FC<QuoteEditorProps> = ({ initialData, isDarkMod
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Exportar PDF
       </button>
+
+      {modal === 'catalog' && (
+        <CatalogPicker
+          isDarkMode={isDarkMode}
+          onClose={() => setModal(null)}
+          onInsertItem={insertCatalogItem}
+          onInsertScope={insertScopeBlock}
+          onInsertText={insertTextBlock}
+        />
+      )}
+      {modal === 'list' && (
+        <QuoteList
+          quotes={quotes}
+          currentId={quoteId}
+          isDarkMode={isDarkMode}
+          onClose={() => setModal(null)}
+          onOpen={(id) => {
+            void loadQuote(id);
+            setModal(null);
+          }}
+          onNew={() => {
+            void newQuote();
+            setModal(null);
+          }}
+          onDuplicate={() => {
+            void duplicateQuote();
+            setModal(null);
+          }}
+          onDelete={(id) => void deleteQuote(id)}
+        />
+      )}
+      {modal === 'admin' && <CatalogAdmin isDarkMode={isDarkMode} onClose={() => setModal(null)} />}
     </div>
   );
 };

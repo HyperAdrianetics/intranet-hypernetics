@@ -8,4 +8,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      // En dev, las funciones /api las sirve el servidor local (pnpm dev:api).
+      '/api': 'http://localhost:3001',
+    },
+  },
 })

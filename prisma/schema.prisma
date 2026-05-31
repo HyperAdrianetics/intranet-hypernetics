@@ -1,0 +1,56 @@
+// Prisma 7: la URL de la base vive en prisma.config.ts (no en el datasource).
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model CatalogItem {
+  id          String   @id @default(uuid())
+  category    String?
+  description String
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("catalog_items")
+}
+
+model ScopeBlock {
+  id        String   @id @default(uuid())
+  title     String
+  items     Json // string[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("scope_blocks")
+}
+
+model TextBlock {
+  id        String   @id @default(uuid())
+  type      String // 'clause' | 'addon' | 'payment_condition' | 'not_included'
+  label     String
+  value     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@map("text_blocks")
+}
+
+model Quote {
+  id          String   @id @default(uuid())
+  folio       String
+  clientName  String   @map("client_name")
+  company     String
+  packageName String   @map("package_name")
+  date        String
+  data        Json // QuoteData completo
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("quotes")
+}

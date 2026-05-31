@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { QuoteData, LineItem } from "../types/quote";
 import { HYPERNETICS_TEMPLATES } from "../types/quote";
+import { api } from "../api/client";
+import type { CatalogItem } from "../../shared";
 import {
   Plus,
   Trash2,
@@ -13,6 +15,9 @@ import {
   Layers,
   Sparkles,
   FilePlus2,
+  Boxes,
+  FolderOpen,
+  Settings2,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -22,6 +27,9 @@ interface SidebarProps {
   duplicateQuote: () => void;
   exportPdf: () => void;
   isDarkMode?: boolean;
+  onOpenCatalog?: () => void;
+  onOpenList?: () => void;
+  onOpenAdmin?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -31,7 +39,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
   duplicateQuote,
   exportPdf,
   isDarkMode = false,
+  onOpenCatalog,
+  onOpenList,
+  onOpenAdmin,
 }) => {
+  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
+  useEffect(() => {
+    api.catalogItems
+      .list()
+      .then(setCatalogItems)
+      .catch(() => setCatalogItems([]));
+  }, []);
+
   const handleItemChange = (
     id: string,
     field: keyof LineItem,
@@ -39,6 +58,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ) => {
     const newItems = data.items.map((item) =>
       item.id === id ? { ...item, [field]: value } : item,
+    );
+    updateQuote({ items: newItems });
+  };
+
+  // Etiqueta corta para el desplegable de catálogo.
+  const catalogLabel = (ci: CatalogItem) => {
+    const firstLine = ci.description.split("\n")[0];
+    const short = firstLine.length > 40 ? `${firstLine.slice(0, 40)}…` : firstLine;
+    return `${short} — $${ci.price.toLocaleString("es-MX")}`;
+  };
+
+  // Si la línea coincide exactamente con un concepto del catálogo, devuelve su id.
+  const matchedCatalogId = (item: LineItem) =>
+    catalogItems.find(
+      (ci) => ci.description === item.description && ci.price === item.price,
+    )?.id ?? "";
+
+  // Rellena descripción y precio de la línea con el concepto guardado elegido.
+  const applyCatalogToItem = (itemId: string, catalogId: string) => {
+    const ci = catalogItems.find((c) => c.id === catalogId);
+    if (!ci) return;
+    const newItems = data.items.map((item) =>
+      item.id === itemId
+        ? { ...item, description: ci.description, price: ci.price }
+        : item,
     );
     updateQuote({ items: newItems });
   };
@@ -96,6 +140,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       <div className="flex flex-col gap-4">
+        {(onOpenList || onOpenCatalog || onOpenAdmin) && (
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              onClick={onOpenList}
+              title="Cotizaciones guardadas"
+              className={`font-medium py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs transition-all ${isDarkMode ? "bg-slate-800 hover:bg-slate-700 text-slate-300" : "bg-slate-100 hover:bg-slate-200 text-slate-700"}`}
+            >
+              <FolderOpen className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onOpenCatalog}
+              title="Agregar del catálogo"
+              className="font-medium py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs transition-all bg-primary/10 text-primary hover:bg-primary/20"
+            >
+              <Boxes className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onOpenAdmin}
+              title="Administrar catálogo"
+              className={`font-medium py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs transition-all ${isDarkMode ? "bg-slate-800 hover:bg-slate-700 text-slate-300" : "bg-slate-100 hover:bg-slate-200 text-slate-700"}`}
+            >
+              <Settings2 className="w-4 h-4" />
+            </button>
+          </div>
+        )}
         <div className="grid grid-cols-3 gap-2">
           <button
             onClick={resetQuote}
@@ -243,6 +312,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
+              {catalogItems.length > 0 && (
+                <div>
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">
+                    Del catálogo
+                  </label>
+                  <select
+                    value={matchedCatalogId(item)}
+                    onChange={(e) => applyCatalogToItem(item.id, e.target.value)}
+                    className={`w-full border rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-primary outline-none transition-all ${isDarkMode ? "bg-slate-900 border-slate-700 text-white" : "bg-white border-slate-200 text-slate-800"}`}
+                  >
+                    <option value="">— Personalizado —</option>
+                    {catalogItems.map((ci) => (
+                      <option key={ci.id} value={ci.id}>
+                        {catalogLabel(ci)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <textarea
                 value={item.description}
                 onChange={(e) =>
