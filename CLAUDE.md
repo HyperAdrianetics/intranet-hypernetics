@@ -88,11 +88,31 @@ pnpm dev                # Vite (proxy /api -> :3001); ojo: si 5173 está ocupado
   (interfaz); tests usan el repo en memoria, sin DB. Los entrypoints de `api/` son
   adaptadores delgados.
 
-## Despliegue (Vercel + Neon, objetivo $0)
+## Despliegue serverless (Vercel + Neon, objetivo $0)
 
-1. Crear base en Neon → `DATABASE_URL` (sin `DB_ADAPTER`).
-2. Importar repo en Vercel, definir `DATABASE_URL`, build `pnpm build`.
-3. `pnpm db:deploy` + `pnpm db:seed` contra Neon.
+Modelo: el frontend Vite se sirve estático y cada archivo de `api/**` se despliega
+como una **función serverless** (ruteo por archivos de Vercel). En runtime se usa
+el adaptador **Neon** (`@prisma/adapter-neon`), apto para conexiones efímeras;
+no se define `DB_ADAPTER` en prod (default = neon). Costo $0 en free tier de
+Vercel (Hobby) + Neon para uso interno de bajo tráfico.
+
+Runbook:
+1. **Neon:** crear proyecto/base y copiar la *connection string*
+   (`postgresql://...?sslmode=require`).
+2. **Migrar la base** (desde local, una sola vez y en cada cambio de esquema):
+   ```bash
+   DATABASE_URL="<neon-url-DIRECTA>" pnpm db:deploy   # prisma migrate deploy
+   DATABASE_URL="<neon-url>" DB_ADAPTER=neon pnpm db:seed
+   ```
+   Nota: para `migrate` usa la URL **directa/unpooled** de Neon; la *pooled*
+   (`-pooler`) es para el runtime serverless.
+3. **Vercel:** importar el repo de GitHub, definir `DATABASE_URL` en Environment
+   Variables (sin `DB_ADAPTER`). Build command: `pnpm build`
+   (`prisma generate && tsc -b && vite build`); output `dist`.
+4. Deploy. Las funciones quedan en `/api/*`; el frontend consume mismo origen.
+
+Config relevante: `vercel.json` (framework vite, buildCommand, outputDirectory) y
+`postinstall: prisma generate` para que el cliente exista al construir funciones.
 
 ## OpenSpec
 
