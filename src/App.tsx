@@ -1,9 +1,23 @@
-import { QuoteEditor } from './components/QuoteEditor';
-import { defaultQuote } from './types/quote';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import MoodBoard from "./components/MoodBoard";
+import { QuoteEditor } from "./components/QuoteEditor";
+import { defaultQuote } from "./types/quote";
 
 function App() {
   return (
-    <QuoteEditor initialData={defaultQuote} isDarkMode={true} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/cotizador"
+          element={
+            <QuoteEditor initialData={defaultQuote} isDarkMode={true} />
+          }
+        />
+        <Route path="/moodboard" element={<MoodBoard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
