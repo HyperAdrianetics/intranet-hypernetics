@@ -15,7 +15,7 @@ import {
   Code,
   Layers,
 } from "lucide-react";
-import mood1 from "../assets/mood-1.jpg";
+import hero from "../assets/Hero.jpg";
 import mood2 from "../assets/mood-2.jpg";
 import mood3 from "../assets/mood-3.jpg";
 import codeBg from "../assets/code-bg.jpg";
@@ -64,36 +64,25 @@ export default function MoodBoard() {
     <section className="min-h-screen min-w-screen bg-gradient-to-br from-background via-primary-blue to-background text-white p-4 md:p-8">
       <div className="mx-auto max-w-[1600px]">
         {/* NAVIGATION HEADER */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 pb-4 border-b border-primary-green/10 no-print">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary-green bg-primary-green/10 hover:bg-primary-green/20 px-4 py-3 rounded-xl transition-all border border-primary-green/20 active:scale-95"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Volver al Inicio
-          </Link>
-        </div>
-
-        <p className="text-primary-green text-sm mb-3">Inter Bold</p>
 
         <div className="border border-primary-green/50 rounded-xl p-5 lg:p-8">
           {/* HEADER */}
 
           <div className="flex flex-col xl:flex-row justify-between gap-8">
             <div className="flex items-center gap-4">
-              <img
-                src="https://hypernetics.com.mx/_next/static/media/hypernetics-logo.7eda4e55.svg"
-                alt="Hypernetics"
-                className="h-12 "
-              />
+              <Link to="/">
+                <img
+                  src="https://hypernetics.com.mx/_next/static/media/hypernetics-logo.7eda4e55.svg"
+                  alt="Hypernetics"
+                  className="h-12 cursor-pointer"
+                />
+              </Link>
             </div>
 
             <div>
               <h1 className="text-primary-green text-2xl md:text-4xl xl:text-4xl font-bold uppercase tracking-wide">
                 Moodboard de Identidad Corporativa
               </h1>
-
-              <p className="mt-2 text-primary-green/70">HEX #d2d2af</p>
             </div>
           </div>
 
@@ -116,7 +105,7 @@ export default function MoodBoard() {
               </div>
 
               <img
-                src={mood1}
+                src={hero}
                 alt=""
                 className="w-full h-[260px] object-cover"
               />
@@ -247,9 +236,14 @@ export default function MoodBoard() {
             {/* ====================================== */}
 
             <div>
-              <h2 className="text-primary-green text-xl mb-6">
+              <h2 className="text-primary-green text-xl mb-2">
                 4. GRAPHIC ELEMENTS & ICONS
               </h2>
+              <p className="text-sm text-primary-green/60 mb-6 underline hover:text-primary-green transition-colors">
+                <a href="https://lucide.dev/art" target="_blank">
+                  Lucide Art icons
+                </a>
+              </p>
 
               <div className="grid grid-cols-4 gap-3">
                 {[
@@ -328,6 +322,16 @@ export default function MoodBoard() {
         </div>
 
         {/* FOOTER */}
+
+        <div className="flex justify-center mt-8 mb-4 no-print">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary-green bg-primary-green/10 hover:bg-primary-green/20 px-4 py-3 rounded-xl transition-all border border-primary-green/20 active:scale-95"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Volver al Inicio
+          </Link>
+        </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4 border-t border-primary-green/10 pt-4">
           <div className="flex items-center gap-3">
