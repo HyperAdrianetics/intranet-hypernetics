@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import MoodBoard from "./components/MoodBoard";
+import EmailSignature from "./components/EmailSignature";
 import { QuoteEditor } from "./components/QuoteEditor";
 import { defaultQuote } from "./types/quote";
 
@@ -16,6 +17,7 @@ function App() {
           }
         />
         <Route path="/moodboard" element={<MoodBoard />} />
+        <Route path="/firma" element={<EmailSignature />} />
       </Routes>
     </BrowserRouter>
   );
