@@ -21,6 +21,7 @@ import {
   Star,
   Heart,
   Code,
+  FileCode,
   Layers,
   Plus,
   Trash2,
@@ -71,7 +72,8 @@ type Section =
   | "badges"
   | "borders"
   | "shadows"
-  | "icons";
+  | "icons"
+  | "codeblocks";
 
 const sections: { id: Section; label: string; icon: typeof Palette }[] = [
   { id: "colors", label: "Colores", icon: Palette },
@@ -83,6 +85,7 @@ const sections: { id: Section; label: string; icon: typeof Palette }[] = [
   { id: "borders", label: "Bordes", icon: Boxes },
   { id: "shadows", label: "Sombras", icon: Sun },
   { id: "icons", label: "Iconos", icon: Code },
+  { id: "codeblocks", label: "Code Blocks", icon: FileCode },
 ];
 
 export default function DesignSystemPage() {
@@ -234,58 +237,40 @@ export default function DesignSystemPage() {
                   Tipografía
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">
-                      Inter (Principal / Body)
-                    </h3>
-                    <p className="text-xs text-slate-500">Regular 400 · Medium 500 · Bold 700</p>
-                    <div className="space-y-2">
-                      <p className="text-4xl font-light">Light 300</p>
-                      <p className="text-4xl">Regular 400</p>
-                      <p className="text-4xl font-medium">Medium 500</p>
-                      <p className="text-4xl font-bold">Bold 700</p>
+                <div className="space-y-8">
+                  <div>
+                    <p className="text-sm text-primary-green/60 mb-3">
+                      PRIMARY / HEADINGS
+                    </p>
+                    <h3 className="text-3xl font-bold">INTER</h3>
+                    <div className="mt-4 space-y-2">
+                      <p className="font-medium">Medium Medium</p>
+                      <p className="font-bold">Bold Bold</p>
                     </div>
-                    <p className="text-sm text-slate-400 mt-4 leading-relaxed max-w-md">
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-primary-green/60 mb-2">
+                      BODY TEXT
+                    </p>
+                    <h3 className="text-3xl">INTER</h3>
+                    <p className="text-primary-green/80 mt-3 max-w-xl">
                       Digital transformation is a process to innovate, evolve and optimize modern businesses through software solutions and agile methodologies.
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-slate-500 mt-2">
                       Inter Regular · 14px · #94a3b8 (slate-400)
                     </p>
                   </div>
 
-                  <div className="space-y-8">
-                    <div>
-                      <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
-                        Headings
-                      </h3>
-                      <div className="space-y-1">
-                        <p className="text-xs text-slate-500">Plus Jakarta Sans Bold</p>
-                        <p className="text-3xl font-bold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                          Heading XL (30px)
-                        </p>
-                        <p className="text-2xl font-bold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                          Heading LG (24px)
-                        </p>
-                        <p className="text-xl font-bold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                          Heading MD (20px)
-                        </p>
-                        <p className="text-lg font-bold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                          Heading SM (18px)
-                        </p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
-                        Code (Geist Mono)
-                      </h3>
-                      <div className="bg-primary-blue/80 p-4 rounded-xl text-sm font-mono border border-slate-800">
-                        <pre className="text-slate-300">{`const app = {
+                  <div>
+                    <p className="text-sm text-primary-green/60 mb-2">
+                      CODE TEXT: GEIST MONO
+                    </p>
+                    <div className="bg-primary-blue p-4 rounded-xl text-sm font-mono border border-slate-800">
+                      <pre className="text-slate-300">{`const app = {
   name: "Hypernetics",
   stack: "React + Node"
 }`}</pre>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -719,6 +704,62 @@ export default function DesignSystemPage() {
                     </div>
                   ))}
                 </div>
+              </section>
+
+              {/* ===== CODE BLOCKS ===== */}
+              <section id="section-codeblocks">
+                <h2 className="text-primary-green text-xl font-bold mb-6 flex items-center gap-2">
+                  <FileCode className="w-5 h-5" />
+                  Code Blocks
+                </h2>
+
+                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
+                  Bloque simple
+                </h3>
+                <div className="bg-primary-blue p-5 rounded-xl text-sm font-mono border border-slate-800 mb-8">
+                  <pre className="text-slate-300 leading-relaxed">{`function greet(name: string) {
+  return \`Hello, \${name}!\`;
+}
+
+console.log(greet("Hypernetics"));`}</pre>
+                </div>
+
+                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
+                  JSON / config
+                </h3>
+                <div className="bg-primary-blue p-5 rounded-xl text-sm font-mono border border-slate-800 mb-8">
+                  <pre className="text-slate-300 leading-relaxed">{`{
+  "app": "Hypernetics",
+  "version": "1.0.0",
+  "stack": {
+    "frontend": "React 19 + TypeScript",
+    "backend": "Vercel serverless",
+    "database": "Postgres + Prisma"
+  }
+}`}</pre>
+                </div>
+
+                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
+                  Bash / CLI
+                </h3>
+                <div className="bg-primary-blue p-5 rounded-xl text-sm font-mono border border-slate-800 mb-8">
+                  <pre className="text-slate-300 leading-relaxed">{`$ pnpm install
+$ docker compose up -d
+$ pnpm db:migrate
+$ pnpm dev
+
+  ➜  Local:   http://localhost:5173/
+  ➜  API:     http://localhost:3001/`}</pre>
+                </div>
+
+                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
+                  Inline code
+                </h3>
+                <p className="text-sm text-slate-400 mb-2">
+                  Usa <code className="bg-primary-blue text-primary-green px-1.5 py-0.5 rounded text-xs font-mono border border-slate-800">{"<code>"}</code> para fragmentos inline como{' '}
+                  <code className="bg-primary-blue text-primary-green px-1.5 py-0.5 rounded text-xs font-mono border border-slate-800">pnpm exec tsc -b</code>{' '}
+                  o <code className="bg-primary-blue text-primary-green px-1.5 py-0.5 rounded text-xs font-mono border border-slate-800">border-primary-green/50</code>.
+                </p>
               </section>
             </div>
           </div>

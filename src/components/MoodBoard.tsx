@@ -194,7 +194,7 @@ export default function MoodBoard() {
                     PRIMARY / HEADINGS
                   </p>
 
-                  <h3 className="text-3xl font-bold">PLUS JAKARTA SANS</h3>
+                  <h3 className="text-3xl font-bold">INTER</h3>
 
                   <div className="mt-4 space-y-2">
                     <p className="font-medium">Medium Medium</p>
