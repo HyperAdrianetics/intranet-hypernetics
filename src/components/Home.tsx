@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FileText, Sparkles, Mail, ArrowRight } from "lucide-react";
+import { FileText, Sparkles, Mail, Palette, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -35,7 +35,7 @@ export default function Home() {
         </p>
 
         {/* NAVIGATION CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
           {/* CARD 1: COTIZADOR */}
           <Link
             to="/cotizador"
@@ -101,6 +101,28 @@ export default function Home() {
             <p className="text-slate-400 text-sm leading-relaxed">
               Firma de correo electrónico corporativa. Diseño profesional con
               gradientes y datos de contacto para representantes de ventas.
+            </p>
+          </Link>
+
+          {/* CARD 4: DESIGN SYSTEM */}
+          <Link
+            to="/design-system"
+            className="group relative text-left p-8 rounded-2xl bg-primary-blue/60 border border-slate-800/80 hover:border-primary-green/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,210,175,0.05)] overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(210,210,175,0.08),transparent_70%)] pointer-events-none" />
+
+            <div className="w-12 h-12 rounded-xl bg-slate-800/50 flex items-center justify-center mb-6 group-hover:bg-primary-green/10 border border-slate-700/50 group-hover:border-primary-green/20 transition-all">
+              <Palette className="w-6 h-6 text-slate-400 group-hover:text-primary-green transition-colors" />
+            </div>
+
+            <h2 className="text-xl font-bold text-white group-hover:text-primary-green transition-colors flex items-center gap-2 mb-2">
+              Design System
+              <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+            </h2>
+
+            <p className="text-slate-400 text-sm leading-relaxed">
+              Inventario visual de componentes, tokens y patrones de UI.
+              Consulta colores, tipografía, botones, inputs y más.
             </p>
           </Link>
         </div>
