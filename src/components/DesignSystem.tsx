@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -100,6 +100,26 @@ export default function DesignSystemPage() {
     document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const sectionIds: Section[] = sections.map((s) => s.id);
+
+  const handleScroll = useCallback(() => {
+    const scrollY = window.scrollY + 150;
+    for (let i = sectionIds.length - 1; i >= 0; i--) {
+      const el = document.getElementById(`section-${sectionIds[i]}`);
+      if (el && el.offsetTop <= scrollY) {
+        setActiveSection(sectionIds[i]);
+        return;
+      }
+    }
+    setActiveSection(sectionIds[0]);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
   return (
     <section className="min-h-screen min-w-screen bg-gradient-to-br from-background via-primary-blue to-background text-white p-4 md:p-8">
       <div className="mx-auto max-w-[1600px]">
@@ -126,7 +146,7 @@ export default function DesignSystemPage() {
 
           {/* SIDEBAR NAV */}
           <div className="flex gap-8 flex-col lg:flex-row">
-            <nav className="lg:w-48 shrink-0 space-y-1">
+            <nav className="lg:w-48 shrink-0 space-y-1 lg:sticky lg:top-8 lg:self-start">
               {sections.map((s) => {
                 const Icon = s.icon;
                 return (
