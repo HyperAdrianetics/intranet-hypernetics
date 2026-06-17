@@ -15,15 +15,25 @@ export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error' | 'offline';
 
 const AUTOSAVE_MS = 800;
 
-export const useQuote = (brandKey: string, initialData: QuoteData) => {
-  const [quote, setQuoteState] = useState<QuoteData>({ ...initialData, date: getTodayDate() });
-  const [quoteId, setQuoteId] = useState<string | null>(null);
-  const [quotes, setQuotes] = useState<QuoteSummary[]>([]);
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
-  const [ready, setReady] = useState(false);
+interface UseQuoteOptions {
+  brandKey: string;
+  initialData: QuoteData;
+  ssrQuotes?: QuoteSummary[];
+  ssrQuoteId?: string | null;
+}
 
-  // Evita que el primer cambio tras una carga dispare un guardado redundante.
-  const skipNextSave = useRef(true);
+export const useQuote = ({ brandKey, initialData, ssrQuotes, ssrQuoteId }: UseQuoteOptions) => {
+  const [quote, setQuoteState] = useState<QuoteData>(() => {
+    const withDate = { ...initialData };
+    if (!withDate.date) withDate.date = getTodayDate();
+    return withDate;
+  });
+  const [quoteId, setQuoteId] = useState<string | null>(ssrQuoteId ?? null);
+  const [quotes, setQuotes] = useState<QuoteSummary[]>(ssrQuotes ?? []);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+  const [ready, setReady] = useState(ssrQuoteId != null);
+
+  const skipNextSave = useRef(ssrQuoteId != null);
 
   const reloadQuotes = useCallback(async () => {
     try {
@@ -44,9 +54,14 @@ export const useQuote = (brandKey: string, initialData: QuoteData) => {
     [brandKey],
   );
 
-  // Carga inicial: recupera la cotización más reciente (o la última editada),
-  // crea una nueva si no hay ninguna, y cae a localStorage si la API falla.
+  // Carga inicial (solo cuando NO hay SSR).
   useEffect(() => {
+    if (ssrQuoteId) {
+      // SSR data is already loaded; refresh list in background.
+      reloadQuotes();
+      return;
+    }
+
     let cancelled = false;
     (async () => {
       try {
@@ -66,7 +81,6 @@ export const useQuote = (brandKey: string, initialData: QuoteData) => {
           }
         }
       } catch {
-        // Sin red: restaura el respaldo local si existe.
         if (cancelled) return;
         const backup = readBackup(localStorage, brandKey);
         if (backup) {
@@ -82,10 +96,8 @@ export const useQuote = (brandKey: string, initialData: QuoteData) => {
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brandKey]);
 
-  // Función de guardado con debounce, estable durante el ciclo de vida.
   const saveRef = useRef<ReturnType<typeof debounce<[string, QuoteData]>>>(undefined);
   useEffect(() => {
     saveRef.current = debounce<[string, QuoteData]>((id, data) => {

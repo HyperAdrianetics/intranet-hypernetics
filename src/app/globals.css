@@ -6,7 +6,6 @@
   --color-primary-blue: #191c29;
   --color-secondary-blue: #383e58;
 
-  /* Define legacy-compatible colors to avoid oklch issues with html2pdf */
   --color-slate-50: #f8fafc;
   --color-slate-100: #f1f5f9;
   --color-slate-200: #e2e8f0;
@@ -62,22 +61,12 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   background-color: #13151e;
   color: #111827;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-}
-
-/* Document specific styles */
 .letter-page {
   width: 8.5in;
   min-height: 11in;
@@ -90,11 +79,6 @@ body {
   position: relative;
 }
 
-/* 
-  Legacy color support for html2pdf/html2canvas.
-  We handle most of this via inlining in QuoteEditor.tsx,
-  but some global resets are still useful.
-*/
 #quote-document {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

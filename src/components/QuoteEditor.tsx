@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useQuote } from "../hooks/useQuote";
 import { Sidebar } from "./Sidebar";
@@ -7,13 +9,14 @@ import { DocumentPreview } from "./DocumentPreview";
 import { CatalogPicker } from "./catalog/CatalogPicker";
 import { CatalogAdmin } from "./catalog/CatalogAdmin";
 import { QuoteList } from "./QuoteList";
-import html2pdf from "html2pdf.js";
 import type { QuoteData, LineItem } from "../types/quote";
-import type { CatalogItem, ScopeBlock, TextBlock } from "../../shared";
+import type { CatalogItem, ScopeBlock, TextBlock, QuoteSummary } from "../../shared";
 
 interface QuoteEditorProps {
   initialData: QuoteData;
   isDarkMode?: boolean;
+  ssrQuotes?: QuoteSummary[];
+  ssrQuoteId?: string | null;
 }
 
 const SAVE_LABEL: Record<string, string> = {
@@ -27,6 +30,8 @@ const SAVE_LABEL: Record<string, string> = {
 export const QuoteEditor: React.FC<QuoteEditorProps> = ({
   initialData,
   isDarkMode = false,
+  ssrQuotes,
+  ssrQuoteId,
 }) => {
   const brandKey = "hypernetics";
   const {
@@ -40,7 +45,7 @@ export const QuoteEditor: React.FC<QuoteEditorProps> = ({
     loadQuote,
     newQuote,
     deleteQuote,
-  } = useQuote(brandKey, initialData);
+  } = useQuote({ brandKey, initialData, ssrQuotes, ssrQuoteId });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modal, setModal] = useState<null | "catalog" | "list" | "admin">(null);
 
@@ -85,6 +90,7 @@ export const QuoteEditor: React.FC<QuoteEditorProps> = ({
   };
 
   const exportToPdf = async () => {
+    const html2pdf = (await import("html2pdf.js")).default;
     const element = document.getElementById("quote-document");
     if (!element) return;
 
@@ -353,7 +359,7 @@ export const QuoteEditor: React.FC<QuoteEditorProps> = ({
           {SAVE_LABEL[saveStatus] ?? SAVE_LABEL.idle}
         </div>
         <Link
-          to="/"
+          href="/"
           className="inline-flex items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-primary-green bg-background/80 hover:bg-primary-green/20 px-3 py-2 rounded-full transition-all border border-primary-green/20 active:scale-95 backdrop-blur-sm"
         >
           <ArrowLeft className="w-3 h-3" />

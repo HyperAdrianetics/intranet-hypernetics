@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { createMemoryRepositories } from '../../api/_lib/repositories/memory';
-import * as quotes from '../../api/_lib/services/quotes';
-import type { Repositories } from '../../api/_lib/repositories/types';
+import { createMemoryRepositories } from '../../src/lib/repositories/memory';
+import * as quotes from '../../src/lib/services/quotes';
+import type { Repositories } from '../../src/lib/repositories/types';
 import type { QuoteData } from '../../shared';
 
 function makeQuote(overrides: Partial<QuoteData> = {}): QuoteData {

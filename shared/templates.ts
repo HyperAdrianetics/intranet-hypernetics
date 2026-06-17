@@ -1,4 +1,4 @@
-import type { QuoteData } from './schemas.js';
+import type { QuoteData } from './schemas';
 
 /**
  * Datos reutilizables de Hypernetics. Viven en `shared/` para que tanto el

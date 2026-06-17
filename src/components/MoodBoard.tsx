@@ -1,5 +1,7 @@
+"use client";
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import {
   ArrowLeft,
   Palette,
@@ -15,21 +17,7 @@ import {
   Code,
   Layers,
 } from "lucide-react";
-import hero from "../assets/Hero.jpg";
-import mood2 from "../assets/mood-2.jpg";
-import mood3 from "../assets/mood-3.jpg";
-import codeBg from "../assets/code-bg.jpg";
-import abstract from "../assets/abstract.jpg";
-import aws from "../assets/technologies/aws.svg";
-import docker from "../assets/technologies/docker.svg";
-import mongodb from "../assets/technologies/mongodb.svg";
-import nextjs from "../assets/technologies/nextjs.svg";
-import nodejs from "../assets/technologies/node-js.svg";
-import postgresql from "../assets/technologies/postgresql.svg";
-import python from "../assets/technologies/python.svg";
-import react from "../assets/technologies/react.svg";
-import reactnative from "../assets/technologies/reactnative.svg";
-import typescript from "../assets/technologies/typescript.svg";
+
 
 const paletteColors = [
   { name: "PRIMARY GREEN", hex: "#a7cf9e", className: "bg-[#a7cf9e]" },
@@ -70,7 +58,7 @@ export default function MoodBoard() {
 
           <div className="flex flex-col xl:flex-row justify-between gap-8">
             <div className="flex items-center gap-4">
-              <Link to="/">
+              <Link href="/">
                 <img
                   src="https://hypernetics.com.mx/_next/static/media/hypernetics-logo.7eda4e55.svg"
                   alt="Hypernetics"
@@ -105,20 +93,20 @@ export default function MoodBoard() {
               </div>
 
               <img
-                src={hero}
+                src="/Hero.jpg"
                 alt=""
                 className="w-full h-[260px] object-cover"
               />
 
               <div className="grid grid-cols-2 gap-3">
                 <img
-                  src={mood2}
+                  src="/mood-2.jpg"
                   alt=""
                   className="h-[180px] w-full object-cover"
                 />
 
                 <img
-                  src={mood3}
+                  src="/mood-3.jpg"
                   alt=""
                   className="h-[180px] w-full object-cover"
                 />
@@ -175,7 +163,7 @@ export default function MoodBoard() {
               )}
 
               <img
-                src={codeBg}
+                src="/assets/code-bg.jpg"
                 alt=""
                 className="w-full h-32 object-cover mt-6"
               />
@@ -275,16 +263,16 @@ export default function MoodBoard() {
 
               <div className="grid grid-cols-4 gap-3 mt-6">
                 {[
-                  aws,
-                  docker,
-                  mongodb,
-                  nextjs,
-                  nodejs,
-                  postgresql,
-                  python,
-                  react,
-                  reactnative,
-                  typescript,
+                  "/assets/technologies/aws.svg",
+                  "/assets/technologies/docker.svg",
+                  "/assets/technologies/mongodb.svg",
+                  "/assets/technologies/nextjs.svg",
+                  "/assets/technologies/node-js.svg",
+                  "/assets/technologies/postgresql.svg",
+                  "/assets/technologies/python.svg",
+                  "/assets/technologies/react.svg",
+                  "/assets/technologies/reactnative.svg",
+                  "/assets/technologies/typescript.svg",
                 ].map((src, index) => (
                   <div
                     key={index}
@@ -312,7 +300,7 @@ export default function MoodBoard() {
                 />
 
                 <img
-                  src={abstract}
+                  src="/assets/abstract.jpg"
                   alt=""
                   className="h-24 object-cover w-full rounded"
                 />
@@ -325,7 +313,7 @@ export default function MoodBoard() {
 
         <div className="flex justify-center mt-8 mb-4 no-print">
           <Link
-            to="/"
+            href="/"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary-green bg-primary-green/10 hover:bg-primary-green/20 px-4 py-3 rounded-xl transition-all border border-primary-green/20 active:scale-95"
           >
             <ArrowLeft className="w-4 h-4" />

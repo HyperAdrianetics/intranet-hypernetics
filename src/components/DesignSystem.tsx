@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useCallback, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import {
   ArrowLeft,
   Palette,
@@ -130,7 +132,7 @@ export default function DesignSystemPage() {
           {/* HEADER */}
           <div className="flex flex-col xl:flex-row justify-between gap-8">
             <div className="flex items-center gap-4">
-              <Link to="/">
+              <Link href="/">
                 <img
                   src="https://hypernetics.com.mx/_next/static/media/hypernetics-logo.7eda4e55.svg"
                   alt="Hypernetics"
@@ -768,7 +770,7 @@ $ pnpm dev
         {/* FOOTER */}
         <div className="flex justify-center mt-8 mb-4 no-print">
           <Link
-            to="/"
+            href="/"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary-green bg-primary-green/10 hover:bg-primary-green/20 px-4 py-3 rounded-xl transition-all border border-primary-green/20 active:scale-95"
           >
             <ArrowLeft className="w-4 h-4" />

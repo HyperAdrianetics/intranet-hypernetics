@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { FileText, Sparkles, Mail, Palette, ArrowRight } from "lucide-react";
 
 export default function Home() {
@@ -38,7 +38,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
           {/* CARD 1: COTIZADOR */}
           <Link
-            to="/cotizador"
+            href="/cotizador"
             className="group relative text-left p-8 rounded-2xl bg-primary-blue/60 border border-slate-800/80 hover:border-primary-green/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,210,175,0.05)] overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(210,210,175,0.08),transparent_70%)] pointer-events-none" />
@@ -61,7 +61,7 @@ export default function Home() {
 
           {/* CARD 2: MOOD BOARD */}
           <Link
-            to="/moodboard"
+            href="/moodboard"
             className="group relative text-left p-8 rounded-2xl bg-primary-blue/60 border border-slate-800/80 hover:border-primary-green/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,210,175,0.05)] overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(210,210,175,0.08),transparent_70%)] pointer-events-none" />
@@ -84,7 +84,7 @@ export default function Home() {
 
           {/* CARD 3: FIRMA */}
           <Link
-            to="/firma"
+            href="/firma"
             className="group relative text-left p-8 rounded-2xl bg-primary-blue/60 border border-slate-800/80 hover:border-primary-green/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,210,175,0.05)] overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(210,210,175,0.08),transparent_70%)] pointer-events-none" />
@@ -106,7 +106,7 @@ export default function Home() {
 
           {/* CARD 4: DESIGN SYSTEM */}
           <Link
-            to="/design-system"
+            href="/design-system"
             className="group relative text-left p-8 rounded-2xl bg-primary-blue/60 border border-slate-800/80 hover:border-primary-green/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(210,210,175,0.05)] overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(210,210,175,0.08),transparent_70%)] pointer-events-none" />

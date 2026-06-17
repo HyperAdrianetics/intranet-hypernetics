@@ -1,5 +1,7 @@
+"use client";
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 
 export default function EmailSignature() {
@@ -52,7 +54,7 @@ export default function EmailSignature() {
       <div className="w-full max-w-[650px]">
         {/* FLOATING BACK BUTTON */}
         <Link
-          to="/"
+          href="/"
           className="fixed bottom-6 left-6 z-50 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary-green bg-background/80 hover:bg-primary-green/20 px-4 py-3 rounded-xl transition-all border border-primary-green/20 active:scale-95 no-print backdrop-blur-sm"
         >
           <ArrowLeft className="w-4 h-4" />

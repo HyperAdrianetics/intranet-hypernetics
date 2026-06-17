@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { quoteDataSchema } from './schemas.js';
+import { quoteDataSchema } from './schemas';
 
 /** Tipos de bloque de texto reutilizable. Solo `addon` lleva `value` (costo). */
 export const TEXT_BLOCK_TYPES = ['clause', 'addon', 'payment_condition', 'not_included'] as const;
@@ -72,7 +72,7 @@ export interface QuoteSummary {
   updatedAt: string;
 }
 
-export type Quote = QuoteSummary & { data: import('./schemas.js').QuoteData };
+export type Quote = QuoteSummary & { data: import('./schemas').QuoteData };
 
 export const quoteCreateSchema = quoteDataSchema;
 export const quoteUpdateSchema = quoteDataSchema;

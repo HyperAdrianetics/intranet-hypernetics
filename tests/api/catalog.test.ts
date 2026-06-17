@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { createMemoryRepositories } from '../../api/_lib/repositories/memory';
-import { ApiError } from '../../api/_lib/http';
-import * as catalog from '../../api/_lib/services/catalog';
-import type { Repositories } from '../../api/_lib/repositories/types';
+import { createMemoryRepositories } from '../../src/lib/repositories/memory';
+import { ApiError } from '../../src/lib/http';
+import * as catalog from '../../src/lib/services/catalog';
+import type { Repositories } from '../../src/lib/repositories/types';
 
 let repos: Repositories;
 beforeEach(() => {

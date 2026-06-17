@@ -44,7 +44,7 @@ describe('useQuote', () => {
     q.list.mockResolvedValue([summary]);
     q.get.mockResolvedValue(full);
 
-    const { result } = renderHook(() => useQuote('hypernetics', defaultQuote));
+    const { result } = renderHook(() => useQuote({ brandKey: 'hypernetics', initialData: defaultQuote }));
 
     await waitFor(() => expect(result.current.ready).toBe(true));
     expect(result.current.quoteId).toBe('q1');
@@ -56,7 +56,7 @@ describe('useQuote', () => {
     q.list.mockResolvedValue([]);
     q.create.mockResolvedValue({ ...full, id: 'new1' });
 
-    const { result } = renderHook(() => useQuote('hypernetics', defaultQuote));
+    const { result } = renderHook(() => useQuote({ brandKey: 'hypernetics', initialData: defaultQuote }));
     await waitFor(() => expect(result.current.ready).toBe(true));
     expect(q.create).toHaveBeenCalledOnce();
     expect(result.current.quoteId).toBe('new1');
@@ -67,7 +67,7 @@ describe('useQuote', () => {
     q.get.mockResolvedValue(full);
     q.update.mockResolvedValue(full);
 
-    const { result } = renderHook(() => useQuote('hypernetics', defaultQuote));
+    const { result } = renderHook(() => useQuote({ brandKey: 'hypernetics', initialData: defaultQuote }));
     await waitFor(() => expect(result.current.ready).toBe(true));
 
     act(() => result.current.updateQuote({ clientName: 'Nuevo Cliente' }));
@@ -87,7 +87,7 @@ describe('useQuote', () => {
     );
     q.list.mockRejectedValue(new Error('network'));
 
-    const { result } = renderHook(() => useQuote('hypernetics', defaultQuote));
+    const { result } = renderHook(() => useQuote({ brandKey: 'hypernetics', initialData: defaultQuote }));
     await waitFor(() => expect(result.current.ready).toBe(true));
     expect(result.current.saveStatus).toBe('offline');
     expect(result.current.quote.clientName).toBe('Respaldo');

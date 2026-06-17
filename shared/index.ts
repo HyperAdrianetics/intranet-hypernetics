@@ -1,3 +1,3 @@
-export * from './schemas.js';
-export * from './catalog.js';
-export * from './templates.js';
+export * from './schemas';
+export * from './catalog';
+export * from './templates';

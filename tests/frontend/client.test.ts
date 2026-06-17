@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { api, ApiError } from '../../src/api/client';
 
 function mockFetch(impl: (url: string, init?: RequestInit) => Response) {
